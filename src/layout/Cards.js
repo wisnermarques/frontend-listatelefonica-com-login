@@ -37,7 +37,7 @@ function Cards({ persons, handleDelete }) {
   }
 
   return (
-    <div className='row'>
+    <div className='row mb-2'>
       {persons.map((person) => (
         <div className='col-sm-4' key={person.id}>
           <div className='card m-2'>

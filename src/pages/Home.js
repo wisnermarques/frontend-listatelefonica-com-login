@@ -3,9 +3,10 @@ import { useEffect, useState } from 'react'
 import personService from '../services/phonebook'
 
 // import Table from '../layout/Table'
-import Header from '../layout/Header'
 import Input from '../layout/Input'
 import Cards from '../layout/Cards'
+import HeaderLogado from '../layout/HeaderLogado'
+import Footer from '../layout/Footer'
 
 function Home() {
   const [persons, setPersons] = useState([])
@@ -120,9 +121,9 @@ function Home() {
   }
 
   return (
-    <>
-      <Header />
-      <div className='container animate__animated animate__fadeIn'>
+    <div style={{ height: '100vh' }}>
+      <HeaderLogado />
+      <div className='h-75 overflow-y-auto container animate__animated animate__fadeIn'>
         <h2 className='mt-2'>Listar e Cadastrar Pessoas</h2>
         {error ? (
           <p className='alert alert-warning' role='alert'>
@@ -198,15 +199,17 @@ function Home() {
                 </form>
               </>
             ) : (
-              <div>
+              <>
                 <hr />
                 <Cards persons={persons} handleDelete={handleDelete} />
-              </div>
+              </>
             )}
           </>
         )}
       </div>
-    </>
+
+      <Footer />
+    </div>
   )
 }
 

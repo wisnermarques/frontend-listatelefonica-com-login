@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
-
 import { Link, useNavigate } from 'react-router-dom'
-
 import useAuth from '../hooks/useAuth'
 
 function Login() {
@@ -9,15 +7,14 @@ function Login() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState(null)
 
-  const navigate = useNavigate();
-
-  const { signin } = useAuth();
+  const navigate = useNavigate()
+  const { signin } = useAuth()
 
   const handleLogin = async (event) => {
     event.preventDefault()
 
     try {
-      signin({
+      await signin({
         email: username,
         senha: password,
       })
@@ -25,7 +22,7 @@ function Login() {
       setUsername('')
       setPassword('')
       setError(null) // Limpar erros se o login for bem-sucedido
-      navigate("/home");
+      navigate('/home')
     } catch (exception) {
       setError('Credenciais incorretas. Tente novamente.') // Define a mensagem de erro
       setTimeout(() => {

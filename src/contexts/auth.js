@@ -14,34 +14,13 @@ export const AuthProvider = ({ children }) => {
     if (response.data.email !== '') {
       const token = response.data.token
       const email = response.data.dataUser.email
-      localStorage.setItem('user_token', JSON.stringify({ email, token }))
+      const name = response.data.dataUser.nome
+      localStorage.setItem('user_token', JSON.stringify({ name, email, token }))
       setUser(response.data.dataUser)
       return
     } else {
       return { error: 'Usuário ou senha incorretos' }
     }
-  }
-
-  const signup = (email, password) => {
-    const usersStorage = JSON.parse(localStorage.getItem('users_bd'))
-
-    const hasUser = usersStorage?.filter((user) => user.email === email)
-
-    if (hasUser?.length) {
-      return 'Já tem uma conta com esse E-mail'
-    }
-
-    let newUser
-
-    if (usersStorage) {
-      newUser = [...usersStorage, { email, password }]
-    } else {
-      newUser = [{ email, password }]
-    }
-
-    localStorage.setItem('users_bd', JSON.stringify(newUser))
-
-    return
   }
 
   const signout = () => {
@@ -50,9 +29,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider
-      value={{ user, signed: !!user, signin, signup, signout }}
-    >
+    <AuthContext.Provider value={{ user, signed: !!user, signin, signout }}>
       {children}
     </AuthContext.Provider>
   )
