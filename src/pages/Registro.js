@@ -1,22 +1,33 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 function Registro() {
   const [nome, setNome] = useState('')
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
 
-  const handleRegistro = () => {
-    // Lógica de registro aqui (por exemplo, criando um novo usuário)
-    console.log(
-      'Registrando com nome:',
-      nome,
-      'email:',
-      email,
-      'e senha:',
-      senha
-    )
-    // Você pode adicionar aqui a lógica para criar um novo usuário e redirecionar após o registro.
+  const navigate = useNavigate()
+
+  const urlBase = 'http://localhost:3001/api/user/save'
+
+  const handleRegistro = async () => {
+    try {
+      // Requisição POST para uma API fictícia de cadastro de usuários
+      const response = await axios.post(urlBase, {
+        nome: nome,
+        email: email,
+        senha: senha,
+      })
+
+      console.log('Usuário cadastrado com sucesso:', response.data)
+
+      // Lógica para redirecionar após o registro, por exemplo:
+      navigate('/')
+    } catch (error) {
+      console.error('Erro ao cadastrar usuário:', error)
+      // Trate o erro da forma desejada, exibindo uma mensagem de erro, por exemplo.
+    }
   }
 
   return (

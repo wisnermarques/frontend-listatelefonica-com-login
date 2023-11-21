@@ -5,8 +5,7 @@ import HeaderLogado from '../layout/HeaderLogado'
 import useAuth from '../hooks/useAuth'
 
 function Sobre() {
-  const { user } = useAuth() // Supondo que useAuth retorne os dados do usuário, ajuste conforme necessário
-
+  const { user } = useAuth() 
   useEffect(() => {
     // Recupera os dados do usuário do localStorage
     const storedUserData = localStorage.getItem('userData')

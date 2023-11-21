@@ -3,6 +3,9 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import personService from '../services/phonebook'
 import Input from '../layout/Input'
+import HeaderLogado from '../layout/HeaderLogado'
+import Header from '../layout/Header'
+import useAuth from '../hooks/useAuth'
 
 function Editar() {
   const { id } = useParams()
@@ -16,7 +19,18 @@ function Editar() {
   const [fotoPreview, setFotoPreview] = useState(null)
   const [fotoAntiga, setFotoAntiga] = useState(null) // Adicionando estado para a prévia da imagem
 
+  const { user } = useAuth() 
+
   useEffect(() => {
+    // Recupera os dados do usuário do localStorage
+    const storedUserData = localStorage.getItem('userData')
+
+    if (storedUserData) {
+      const userData = JSON.parse(storedUserData)
+      // Faça algo com os dados do usuário recuperados, se necessário
+      console.log('Dados do usuário recuperados:', userData)
+    }
+
     personService.getOne(id).then((response) => {
       setNome(response.data.nome)
       setNumero(response.data.numero)
@@ -84,7 +98,7 @@ function Editar() {
     // Divida a string em dia, mês e ano
     const partesData = dataString.split('/')
     const dia = partesData[0] // 06
-    const mes = partesData[1]// 10 representa novembro (0-based)
+    const mes = partesData[1] // 10 representa novembro (0-based)
     const ano = partesData[2] // 2023
 
     // Coloca a data no formato "aaaa/mm/dd"
@@ -107,82 +121,92 @@ function Editar() {
   }
 
   const cancel = () => {
-    navigate('/')
+    navigate('/home')
   }
 
   return (
-    <div className='container'>
-      <h2>Edição de Dados</h2>
-      <hr />
-      <form onSubmit={editPerson} className='bg-success-subtle p-2'>
-        <Input
-          textLabel='nome'
-          text='Nome'
-          inputType='text'
-          textPlaceholder='Digite o seu nome...'
-          handleChange={handleNomeChange}
-          isPhone={false}
-          defaultValue={nome}
-        />
-        <Input
-          textLabel='telefone'
-          text='Telefone'
-          inputType='text'
-          textPlaceholder='Digite o seu telefone...'
-          handleChange={handleNumeroChange}
-          isPhone={false}
-          defaultValue={numero}
-        />
-        <Input
-          textLabel='email'
-          text='Email'
-          inputType='email'
-          textPlaceholder='Digite o seu email...'
-          handleChange={handleEmailChange}
-          isPhone={false}
-          defaultValue={email}
-        />
-        <Input
-          textLabel='endereco'
-          text='Endereço'
-          inputType='text'
-          textPlaceholder='Digite o seu endereço...'
-          handleChange={handleEnderecoChange}
-          isPhone={false}
-          defaultValue={endereco}
-        />
-        <Input
-          textLabel='data_nascimento'
-          text='Data de nascimento'
-          inputType='text'
-          textPlaceholder=''
-          handleChange={handleDataNascimentoChange}
-          isPhone={false}
-          defaultValue={dataNascimento}
-        />
-        <div className='form-group'>
-          <label htmlFor='foto'>Foto: </label>
-          <input
-            type='file'
-            id='foto'
-            className='form-control-file m-2'
-            onChange={handleFileChange}
-          />
-          {fotoPreview ? (
-            <img
-              src={fotoPreview}
-              alt='Preview'
-              style={{ maxWidth: '200px' }}
+    <div style={{ height: '100vh' }}>
+      {/* Renderiza um cabeçalho diferente com base no estado de login */}
+      {user ? <HeaderLogado /> : <Header />}
+      {user && (
+        <div className='container'>
+          <h2>Edição de Dados</h2>
+          <hr />
+          <form onSubmit={editPerson} className='bg-success-subtle p-2'>
+            <Input
+              textLabel='nome'
+              text='Nome'
+              inputType='text'
+              textPlaceholder='Digite o seu nome...'
+              handleChange={handleNomeChange}
+              isPhone={false}
+              defaultValue={nome}
             />
-          ) : fotoAntiga ? (
-            <img src={fotoAntiga} alt='Preview' style={{ maxWidth: '200px' }} />
-          ) : null}
+            <Input
+              textLabel='telefone'
+              text='Telefone'
+              inputType='text'
+              textPlaceholder='Digite o seu telefone...'
+              handleChange={handleNumeroChange}
+              isPhone={false}
+              defaultValue={numero}
+            />
+            <Input
+              textLabel='email'
+              text='Email'
+              inputType='email'
+              textPlaceholder='Digite o seu email...'
+              handleChange={handleEmailChange}
+              isPhone={false}
+              defaultValue={email}
+            />
+            <Input
+              textLabel='endereco'
+              text='Endereço'
+              inputType='text'
+              textPlaceholder='Digite o seu endereço...'
+              handleChange={handleEnderecoChange}
+              isPhone={false}
+              defaultValue={endereco}
+            />
+            <Input
+              textLabel='data_nascimento'
+              text='Data de nascimento'
+              inputType='text'
+              textPlaceholder=''
+              handleChange={handleDataNascimentoChange}
+              isPhone={false}
+              defaultValue={dataNascimento}
+            />
+            <div className='form-group'>
+              <label htmlFor='foto'>Foto: </label>
+              <input
+                type='file'
+                id='foto'
+                className='form-control-file m-2'
+                onChange={handleFileChange}
+              />
+              {fotoPreview ? (
+                <img
+                  src={fotoPreview}
+                  alt='Preview'
+                  style={{ maxWidth: '200px' }}
+                />
+              ) : fotoAntiga ? (
+                <img
+                  src={fotoAntiga}
+                  alt='Preview'
+                  style={{ maxWidth: '200px' }}
+                />
+              ) : null}
+            </div>
+            <button className='btn btn-success m-2'>Editar</button>
+            <button className='btn btn-danger m-2' onClick={() => cancel()}>
+              Cancelar
+            </button>
+          </form>
         </div>
-        <button className='btn btn-success m-2'>Editar</button>
-        <button className='btn btn-danger m-2' onClick={() => cancel()}>
-          Cancelar
-        </button>
-      </form>
+      )}
     </div>
   )
 }

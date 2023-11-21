@@ -10,23 +10,23 @@ function Cards({ persons, handleDelete }) {
   const [taskIdToDelete, setTaskIdToDelete] = useState(null)
 
   const openConfirmation = (id) => {
-    setTaskIdToDelete(id)
-    setShowConfirmation(true)
-  }
+    setTaskIdToDelete(id);
+    setShowConfirmation(true);
+  };
 
   const closeConfirmation = () => {
-    setTaskIdToDelete(null)
-    setShowConfirmation(false)
-  }
+    setTaskIdToDelete(null);
+    setShowConfirmation(false);
+  };
 
-  const urlBase = 'http://localhost:3001/images/'
+  const urlBase = 'http://localhost:3001/images/';
 
-  const confirmDelete = (id) => {
+  const confirmDelete = () => {
     if (taskIdToDelete !== null) {
-      handleDelete(taskIdToDelete)
-      closeConfirmation()
+      handleDelete(taskIdToDelete);
+      closeConfirmation();
     }
-  }
+  };
 
   if (persons.length === 0) {
     return (
